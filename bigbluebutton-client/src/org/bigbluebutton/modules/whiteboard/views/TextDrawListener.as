@@ -39,7 +39,7 @@ package org.bigbluebutton.modules.whiteboard.views
         
         public function onMouseUp(mouseX:Number, mouseY:Number, tool:WhiteboardTool):void
         {
-            if(tool.graphicType == WhiteboardConstants.TYPE_TEXT) {
+            if (tool.graphicType == WhiteboardConstants.TYPE_TEXT) {
                 var tbWidth:Number = mouseX - _mouseXDown;
                 var tbHeight:Number = mouseY - _mouseYDown;
                 

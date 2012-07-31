@@ -59,8 +59,7 @@
 			import mx.controls.Alert;
 			import mx.events.MoveEvent;
 			import mx.events.ResizeEvent;
-			import mx.managers.CursorManager;
-			
+			import mx.managers.CursorManager;			
 			import org.bigbluebutton.common.Images;
 			import org.bigbluebutton.common.LogUtil;
 			import org.bigbluebutton.main.events.MadePresenterEvent;
@@ -213,12 +212,12 @@
            
             private function graphicObjSelected(event:GraphicObjectFocusEvent):void  {
                 var gobj:IAnnotationDisplay = event.data;
-                LogUtil.debug("!!!!SELECTED:" + " " + gobj.getProperties());
+//                LogUtil.debug("!!!!SELECTED:" + " " + gobj.getProperties());
             }
             
             private function graphicObjDeselected(event:GraphicObjectFocusEvent):void  {
                 var gobj:IAnnotationDisplay = event.data;
-                LogUtil.debug("!!!!DESELECTED:" + " " + gobj.getProperties());
+//                LogUtil.debug("!!!!DESELECTED:" + " " + gobj.getProperties());
             }
 			           
 		]]>

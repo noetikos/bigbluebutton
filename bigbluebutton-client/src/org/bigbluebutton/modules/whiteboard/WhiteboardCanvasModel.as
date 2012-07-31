@@ -21,10 +21,10 @@ package org.bigbluebutton.modules.whiteboard
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.core.managers.UserManager;
 	import org.bigbluebutton.main.events.MadePresenterEvent;
+	import org.bigbluebutton.modules.whiteboard.business.shapes.AnnotationDisplayFactory;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawGrid;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawObject;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.IAnnotationDisplay;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.AnnotationDisplayFactory;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.TextObject;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.WhiteboardConstants;
 	import org.bigbluebutton.modules.whiteboard.events.GraphicObjectFocusEvent;
@@ -37,6 +37,9 @@ package org.bigbluebutton.modules.whiteboard
 	import org.bigbluebutton.modules.whiteboard.views.PencilDrawListener;
 	import org.bigbluebutton.modules.whiteboard.views.TextDrawListener;
 	import org.bigbluebutton.modules.whiteboard.views.WhiteboardCanvas;
+	import org.bigbluebutton.modules.whiteboard.views.annotations.IBuilder;
+	import org.bigbluebutton.modules.whiteboard.views.annotations.ScribbleBuilder;
+	import org.bigbluebutton.modules.whiteboard.views.annotations.TextBuilder;
 	import org.bigbluebutton.modules.whiteboard.views.models.WhiteboardTool;
 	
     /**
@@ -61,8 +64,8 @@ package org.bigbluebutton.modules.whiteboard
         
         public function set wbCanvas(canvas:WhiteboardCanvas):void {
             _wbCanvas = canvas;
-            drawListeners.push(new PencilDrawListener(_wbCanvas, sendShapeFrequency, shapeFactory));
-            drawListeners.push(new TextDrawListener(_wbCanvas, sendShapeFrequency, shapeFactory));
+            drawListeners.push(new ScribbleBuilder(_wbCanvas, sendShapeFrequency, shapeFactory));
+            drawListeners.push(new TextBuilder(_wbCanvas, sendShapeFrequency, shapeFactory));
         }
         
         public function zoomCanvas(width:Number, height:Number):void {
@@ -82,20 +85,20 @@ package org.bigbluebutton.modules.whiteboard
 		public function doMouseUp(mouseX:Number, mouseY:Number):void {
 //            LogUtil.debug("CanvasModel doMouseUp ***");
             for (var ob:int = 0; ob < drawListeners.length; ob++) {
-                (drawListeners[ob] as IDrawListener).onMouseUp(mouseX, mouseY, wbTool);
+                (drawListeners[ob] as IBuilder).onMouseUp(mouseX, mouseY, wbTool);
             }
 		}
 				       		
 		public function doMouseDown(mouseX:Number, mouseY:Number):void {
 //            LogUtil.debug("*** CanvasModel doMouseDown");
             for (var ob:int = 0; ob < drawListeners.length; ob++) {
-                (drawListeners[ob] as IDrawListener).onMouseDown(mouseX, mouseY, wbTool);
+                (drawListeners[ob] as IBuilder).onMouseDown(mouseX, mouseY, wbTool);
             }
 		}
 				
 		public function doMouseMove(mouseX:Number, mouseY:Number):void {
             for (var ob:int = 0; ob < drawListeners.length; ob++) {
-                (drawListeners[ob] as IDrawListener).onMouseMove(mouseX, mouseY, wbTool);
+                (drawListeners[ob] as IBuilder).onMouseMove(mouseX, mouseY, wbTool);
             }
 		}
 				

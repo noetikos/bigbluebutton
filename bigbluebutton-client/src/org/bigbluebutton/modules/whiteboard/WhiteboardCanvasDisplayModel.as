@@ -161,7 +161,8 @@ package org.bigbluebutton.modules.whiteboard
 			tobj.makeEditable(true);
             tobj.border = true;
 //            LogUtil.debug("Putting text object [" + tobj.getGraphicID() + "] in [" + tobj.x + "," + tobj.y + "]");
-			tobj.registerListeners(textObjGainedFocusListener, textObjLostFocusListener, textObjTextListener, textObjSpecialListener);
+			tobj.registerListeners(textObjGainedFocusListener, textObjLostFocusListener, 
+										textObjTextListener, textObjSpecialListener);
 			wbCanvas.addGraphic(tobj);
 			wbCanvas.stage.focus = tobj.focus();
 			annotationsDisplayList.push(tobj);
