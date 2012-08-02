@@ -22,6 +22,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 	import com.asfusion.mate.core.GlobalDispatcher;
 	
 	import flash.display.DisplayObject;
+	import flash.display.InteractiveObject;
 	import flash.display.Shape;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -39,11 +40,12 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 	import flexlib.scheduling.scheduleClasses.utils.Selection;
 	
 	import mx.controls.Text;
+	import mx.core.UIComponent;
 	
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.modules.whiteboard.WhiteboardCanvasModel;
 
-	public class TextObject extends TextField implements GraphicObject {
+	public class TextObject extends UIComponent implements GraphicObject {
 		public static const TYPE_NOT_EDITABLE:String = "dynamic";
 		public static const TYPE_EDITABLE:String = "editable";
 		
@@ -75,11 +77,13 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
         private var _origParentHeight:Number = 0;
         public var fontStyle:String = "arial";
         
+        private var tf:TextField = new TextField();
+        
 		public function TextObject(text:String, textColor:uint, bgColor:uint, bgColorVisible:Boolean, x:Number, y:Number, boxWidth:Number, boxHeight:Number, textSize:Number) {
-			this.text = text;
-			this.textColor = textColor;
-			this.backgroundColor = bgColor;
-			this.background = bgColorVisible;
+			tf.text = text;
+			tf.textColor = textColor;
+			tf.backgroundColor = bgColor;
+			tf.background = bgColorVisible;
             origX = x;
             origY = y;
             this.x = x;
@@ -87,6 +91,8 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
             _textBoxWidth = boxWidth;
             _textBoxHeight = boxHeight;
 			this.textSize = textSize;
+            
+            addChild(tf);
 		}	
 		
         public function getOrigX():Number {
@@ -108,6 +114,46 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 		public function setGraphicID(id:String):void {
 			this.ID = id;
 		}
+        
+        public function get background():Boolean {
+            return tf.background;
+        }
+        
+        public function set background(b:Boolean):void {
+            tf.background = b;
+        }
+        
+        public function get backgroundColor():uint {
+            return tf.backgroundColor;
+        }
+        
+        public function set backgroundColor(c:uint):void {
+            tf.backgroundColor = c;
+        }
+        
+        public function get textColor():uint {
+            return tf.textColor;
+        }
+        
+        public function get text():String {
+            return tf.text;
+        }
+        
+        public function set border(b:Boolean):void {
+            tf.border = b;
+        }
+        
+        public function set wordWrap(w:Boolean):void {
+            tf.wordWrap = w;
+        }
+        
+        public function set multiline(m:Boolean):void {
+            tf.multiline = m;
+        }
+        
+        public function set autoSize(size:String):void {
+            tf.autoSize = size;
+        }
 		
 		public function denormalize(val:Number, side:Number):Number {
 			return (val*side)/100.0;
@@ -119,11 +165,11 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 		
 		private function applyTextFormat(size:Number):void {
 //            LogUtil.debug(" *** Font text size [" + textSize + "," + size + "]");
-			var tf:TextFormat = new TextFormat();
-			tf.size = size;
-			tf.font = "arial";
-			this.defaultTextFormat = tf;
-			this.setTextFormat(tf);
+			var format:TextFormat = new TextFormat();
+            format.size = size;
+            format.font = "arial";
+			tf.defaultTextFormat = format;
+			tf.setTextFormat(format);
 		}
 		
 		public function makeGraphic(parentWidth:Number, parentHeight:Number):void {
@@ -142,12 +188,14 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
                 newFontSize = (parentHeight/_origParentHeight) * textSize;
 //                LogUtil.debug("2 Old parent dim [" + _origParentWidth + "," + _origParentHeight + "] newFontSize=" + newFontSize);
             }            
-			this.antiAliasType = AntiAliasType.ADVANCED;
+			tf.antiAliasType = AntiAliasType.ADVANCED;
             applyTextFormat(newFontSize);
 //            setTextFormat(new TextFormat(fontStyle, newFontSize, textColor));
  
             this.width = denormalize(_textBoxWidth, parentWidth);
-//            this.height = denormalize(_textBoxHeight, parentHeight);
+            this.height = denormalize(_textBoxHeight, parentHeight);
+            tf.width = this.width;
+            tf.height = this.height;
             
             LogUtil.debug("2 Old parent dim [" + _origParentWidth + "," + _origParentHeight + "][" + width + "," + height + "] newFontSize=" + newFontSize);
 		}	
@@ -184,50 +232,55 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
                 
 //            LogUtil.debug("Redraw 2 Old parent dim [" + origParentWidth + "," + origParentHeight + "] newFontSize=" + newFontSize);
      
-            this.antiAliasType = AntiAliasType.ADVANCED;
+            tf.antiAliasType = AntiAliasType.ADVANCED;
             applyTextFormat(newFontSize);
             //            setTextFormat(new TextFormat(fontStyle, newFontSize, textColor));
 
             this.width = denormalize(_textBoxWidth, parentWidth);
             this.height = denormalize(_textBoxHeight, parentHeight);
-            
+            tf.width = this.width;
+            tf.height = this.height;            
             LogUtil.debug("Redraw dim [" + _origParentWidth + "," + _origParentHeight + "][" + width + "," + height + "] newFontSize=" + newFontSize);
             
  //           LogUtil.debug("Redraw 2 Old parent dim [" + this.width + "," + this.height + "] newFontSize=" + newFontSize);
         }
         
+        public function focus():InteractiveObject {
+            return tf;
+        }
+        
 		public function getProperties():Array {
 			var props:Array = new Array();
-			props.push(this.text);
-			props.push(this.textColor);
-			props.push(this.backgroundColor);
-			props.push(this.background);
-			props.push(this.x);
-			props.push(this.y);
+			props.push(tf.text);
+			props.push(tf.textColor);
+			props.push(tf.backgroundColor);
+			props.push(tf.background);
+			props.push(tf.x);
+			props.push(tf.y);
 			return props;
 		}
 		
 		public function makeEditable(editable:Boolean):void {
 			if(editable) {
-				this.type = TextFieldType.INPUT;
+				tf.type = TextFieldType.INPUT;
 			} else {
-				this.type = TextFieldType.DYNAMIC;
+				tf.type = TextFieldType.DYNAMIC;
 			}
 			this._editable = editable;
 		}
 		
 		public function registerListeners(textObjGainedFocus:Function, textObjLostFocus:Function, textObjTextListener:Function, textObjDeleteListener:Function):void {											  
-			this.addEventListener(FocusEvent.FOCUS_IN, textObjGainedFocus);
-			this.addEventListener(FocusEvent.FOCUS_OUT, textObjLostFocus);
-			this.addEventListener(TextEvent.TEXT_INPUT, textObjTextListener);
-			this.addEventListener(KeyboardEvent.KEY_DOWN, textObjDeleteListener);
+			tf.addEventListener(FocusEvent.FOCUS_IN, textObjGainedFocus);
+			tf.addEventListener(FocusEvent.FOCUS_OUT, textObjLostFocus);
+			tf.addEventListener(TextEvent.TEXT_INPUT, textObjTextListener);
+			tf.addEventListener(KeyboardEvent.KEY_DOWN, textObjDeleteListener);
 		}		
 		
 		public function deregisterListeners(textObjGainedFocus:Function, textObjLostFocus:Function, textObjTextListener:Function, textObjDeleteListener:Function):void {			
-			this.removeEventListener(FocusEvent.FOCUS_IN, textObjGainedFocus);
-			this.removeEventListener(FocusEvent.FOCUS_OUT, textObjLostFocus);
-			this.removeEventListener(TextEvent.TEXT_INPUT, textObjTextListener);
-			this.removeEventListener(KeyboardEvent.KEY_DOWN, textObjDeleteListener);
+			tf.removeEventListener(FocusEvent.FOCUS_IN, textObjGainedFocus);
+			tf.removeEventListener(FocusEvent.FOCUS_OUT, textObjLostFocus);
+			tf.removeEventListener(TextEvent.TEXT_INPUT, textObjTextListener);
+			tf.removeEventListener(KeyboardEvent.KEY_DOWN, textObjDeleteListener);
 		}
 	}
 }
