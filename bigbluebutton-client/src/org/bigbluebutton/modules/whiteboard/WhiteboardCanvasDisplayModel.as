@@ -418,8 +418,8 @@ package org.bigbluebutton.modules.whiteboard
         public function textObjGainedFocusListener(event:FocusEvent):void {
 //            LogUtil.debug("### GAINED FOCUS ");
             var tf:TextObject = event.currentTarget as TextObject;
-            wbCanvas.stage.focus = tf;
-            tf.stage.focus = tf;
+            wbCanvas.stage.focus = tf.focus();
+            tf.stage.focus = tf.focus();
             currentlySelectedTextObject = tf;
             var e:GraphicObjectFocusEvent = new GraphicObjectFocusEvent(GraphicObjectFocusEvent.OBJECT_SELECTED);
             e.data = tf;
