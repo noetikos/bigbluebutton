@@ -36,7 +36,6 @@
 			import org.bigbluebutton.modules.whiteboard.events.WhiteboardDrawEvent;
 			import org.bigbluebutton.modules.whiteboard.events.WhiteboardPresenterEvent;
 			import org.bigbluebutton.modules.whiteboard.events.WhiteboardUpdate;
-			import org.bigbluebutton.modules.whiteboard.managers.PageManager;
 			import org.bigbluebutton.modules.whiteboard.managers.WhiteboardManager;
 			import org.bigbluebutton.modules.whiteboard.models.WhiteboardModel;
 			import org.bigbluebutton.modules.whiteboard.services.MessageReceiver;
@@ -47,22 +46,19 @@
 			private function dummyMethod():void{
 				
 			}
-            
-            // constructorArguments="{WhiteboardModel}"  constructorArguments="{lastReturn}" constructorArguments="{scope.dispatcher}"
+
 		]]>
 	</mx:Script>
-	
-	
+		
 	<EventHandlers type="{WhiteboardPresenterEvent.MODIFY_ENABLED}" >
 		<MethodInvoker generator="{WhiteboardService}" method="modifyEnabled" arguments="{event}" />
 	</EventHandlers>
-	
-	<EventHandlers type="{NavigationEvent.GOTO_PAGE}" >
-		<MethodInvoker generator="{PageManager}" method="changePage" arguments="{event}" />
-	</EventHandlers>
-	
+
+    <EventHandlers type="{NavigationEvent.GOTO_PAGE}" >
+        <MethodInvoker generator="{WhiteboardService}" method="changePage" arguments="{event.pageNum}" />
+    </EventHandlers>
+    
 	<EventHandlers type="{PresentationEvent.PRESENTATION_LOADED}" >
-		<MethodInvoker generator="{PageManager}" method="createPages" arguments="{event}" />
 		<MethodInvoker generator="{WhiteboardService}" method="setActivePresentation" arguments="{event}" />
 	</EventHandlers>
 	
@@ -93,31 +89,7 @@
 	<EventHandlers type="{ToggleGridEvent.TOGGLE_GRID}" >
 		<MethodInvoker generator="{WhiteboardService}" method="toggleGrid" />
 	</EventHandlers>
-	
-	<EventHandlers type="{WhiteboardUpdate.BOARD_UPDATED}">
-		<MethodInvoker generator="{PageManager}" method="addGraphicToPage" arguments="{event}" />
-	</EventHandlers>
-	
-	<EventHandlers type="{WhiteboardUpdate.GRAPHIC_UNDONE}" >
-		<MethodInvoker generator="{PageManager}" method="undoGraphicFromPage" />
-	</EventHandlers>
-	
-	<EventHandlers type="{WhiteboardUpdate.BOARD_CLEARED}" >
-		<MethodInvoker generator="{PageManager}" method="clearPage" />
-	</EventHandlers>
-	
-	<EventHandlers type="{ToggleGridEvent.GRID_TOGGLED}" >
-		<MethodInvoker generator="{PageManager}" method="toggleGrid" />
-	</EventHandlers>
-		
-	<EventHandlers type="{PageEvent.CHANGE_PAGE}" >
-		<MethodInvoker generator="{WhiteboardService}" method="changePage" arguments="{event}" />
-	</EventHandlers>
-	
-	<EventHandlers type="{PageEvent.LOAD_PAGE}" >
-		<MethodInvoker generator="{PageManager}" method="loadPage" arguments="{event}" />
-	</EventHandlers>
-	
+				
 	<EventHandlers type="{WhiteboardButtonEvent.WHITEBOARD_ADDED_TO_PRESENTATION}" >
 		<MethodInvoker generator="{WhiteboardManager}" method="positionToolbar" arguments="{event}" />
 	</EventHandlers>

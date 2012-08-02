@@ -55,6 +55,7 @@ package org.bigbluebutton.modules.whiteboard.models
 		}
 		
 		public function addAnnotation(annotation:Annotation):void {
+            LogUtil.debug("**** Addign annotation to page."); 
 			_currentPage.addAnnotation(annotation);
 		}
 		

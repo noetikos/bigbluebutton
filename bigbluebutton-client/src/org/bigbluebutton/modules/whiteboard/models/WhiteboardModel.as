@@ -23,11 +23,14 @@ package org.bigbluebutton.modules.whiteboard.models
 		public function addAnnotation(annotation:Annotation):void {
             LogUtil.debug("*** Adding annotation [" + annotation.id + "," + annotation.type + "," + annotation.status + "] ****");
             if (annotation.status == DrawObject.DRAW_START || annotation.status == TextObject.TEXT_CREATED) {
+                LogUtil.debug("*** Adding annotation to presentation. ****");
                 _currentPresentation.addAnnotation(annotation);
             } else {
+                LogUtil.debug("*** Updating annotation in presentation. ****");
                 _currentPresentation.updateAnnotation(annotation);
             }
-			            
+			
+            LogUtil.debug("*** Dispatching WhiteboardUpdate.BOARD_UPDATED Event ****");
             var event:WhiteboardUpdate = new WhiteboardUpdate(WhiteboardUpdate.BOARD_UPDATED);
             event.annotation = annotation;
             event.recvdShapes = false;

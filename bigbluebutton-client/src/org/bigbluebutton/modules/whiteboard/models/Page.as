@@ -1,6 +1,8 @@
 package org.bigbluebutton.modules.whiteboard.models
 {
 	import mx.collections.ArrayCollection;
+	
+	import org.bigbluebutton.common.LogUtil;
 
 	public class Page
 	{
@@ -13,6 +15,7 @@ package org.bigbluebutton.modules.whiteboard.models
 		}
 		
 		public function addAnnotation(annotation:Annotation):void {
+            LogUtil.debug("Adding annotation id=" + annotation.id);
 			_annotations.addItem(annotation);
 		}
 		

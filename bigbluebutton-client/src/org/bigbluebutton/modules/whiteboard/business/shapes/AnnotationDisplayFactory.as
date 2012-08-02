@@ -208,11 +208,5 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 			e.makeGraphic(_parentWidth, _parentHeight);
 			return e;
 		}
-
-        private function makeText(e:Text):DrawObject{
-            e.makeShape(_parentWidth, _parentHeight);
-            return e;
-        }
-
 	}
 }
