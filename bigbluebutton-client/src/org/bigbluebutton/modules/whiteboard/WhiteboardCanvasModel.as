@@ -23,11 +23,9 @@ package org.bigbluebutton.modules.whiteboard
 	import org.bigbluebutton.main.events.MadePresenterEvent;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawGrid;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawObject;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.GraphicFactory;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.GraphicObject;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.ShapeFactory;
+	import org.bigbluebutton.modules.whiteboard.business.shapes.IAnnotationDisplay;
+	import org.bigbluebutton.modules.whiteboard.business.shapes.AnnotationDisplayFactory;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.TextBox;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.TextFactory;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.TextObject;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.WhiteboardConstants;
 	import org.bigbluebutton.modules.whiteboard.events.GraphicObjectFocusEvent;
@@ -49,7 +47,7 @@ package org.bigbluebutton.modules.whiteboard
 		private var _wbCanvas:WhiteboardCanvas;	      
         private var drawListeners:Array = new Array();
         private var wbTool:WhiteboardTool = new WhiteboardTool();
-        private var shapeFactory:ShapeFactory = new ShapeFactory();
+        private var shapeFactory:AnnotationDisplayFactory = new AnnotationDisplayFactory();
         
 		
 		/* represents the max number of 'points' enumerated in 'segment' before 

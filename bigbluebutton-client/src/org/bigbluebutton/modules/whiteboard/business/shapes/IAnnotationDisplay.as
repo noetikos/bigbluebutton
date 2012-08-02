@@ -20,24 +20,23 @@
 package org.bigbluebutton.modules.whiteboard.business.shapes
 {
 	import flash.display.DisplayObject;
+	
+	import org.bigbluebutton.common.LogUtil;
 
-	public class GraphicFactory
-	{
-		public static const SHAPE_FACTORY:String = "SHAPE_FACTORY";
-		public static const TEXT_FACTORY:String = "TEXT_FACTORY";
+	public interface IAnnotationDisplay {
+			
+		function getGraphicType():String;
 		
-		public var factory_type:String;
+		function getGraphicID():String;
 		
-		public function GraphicFactory(type:String) {
-			this.factory_type = type;
-		}
+		function setGraphicID(id:String):void;
 		
-		public static function denormalize(val:Number, side:Number):Number {
-			return (val*side)/100.0;
-		}
+		function denormalize(val:Number, side:Number):Number;
 		
-		public static function normalize(val:Number, side:Number):Number {
-			return (val*100.0)/side;
-		}
+		function normalize(val:Number, side:Number):Number;
+				
+		function makeGraphic(parentWidth:Number, parentHeight:Number):void;
+		
+		function getProperties():Array;
 	}
 }

@@ -33,9 +33,9 @@
             import org.bigbluebutton.modules.whiteboard.WhiteboardCanvasDisplayModel;
             import org.bigbluebutton.modules.whiteboard.WhiteboardCanvasModel;
             import org.bigbluebutton.modules.whiteboard.business.shapes.DrawObject;
-            import org.bigbluebutton.modules.whiteboard.business.shapes.GraphicObject;
+            import org.bigbluebutton.modules.whiteboard.business.shapes.IAnnotationDisplay;
             import org.bigbluebutton.modules.whiteboard.business.shapes.SelectObject;
-            import org.bigbluebutton.modules.whiteboard.business.shapes.ShapeFactory;
+            import org.bigbluebutton.modules.whiteboard.business.shapes.AnnotationDisplayFactory;
             import org.bigbluebutton.modules.whiteboard.business.shapes.TextObject;
             import org.bigbluebutton.modules.whiteboard.events.PageEvent;
             import org.bigbluebutton.modules.whiteboard.events.WhiteboardButtonEvent;

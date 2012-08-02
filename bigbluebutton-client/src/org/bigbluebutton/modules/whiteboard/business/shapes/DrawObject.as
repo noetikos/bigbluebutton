@@ -32,7 +32,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 	 * @author dzgonjan
 	 * 
 	 */	
-	public class DrawObject extends Sprite implements GraphicObject {
+	public class DrawObject extends Sprite implements IAnnotationDisplay {
 		public static const PENCIL:String = "pencil";
 		public static const HIGHLIGHTER:String = "highlighter";
 		public static const ERASER:String = "eraser";

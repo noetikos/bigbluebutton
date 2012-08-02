@@ -1,6 +1,6 @@
 package org.bigbluebutton.modules.whiteboard.views
 {
-    import org.bigbluebutton.modules.whiteboard.business.shapes.GraphicObject;
+    import org.bigbluebutton.modules.whiteboard.business.shapes.IAnnotationDisplay;
     import org.bigbluebutton.modules.whiteboard.models.Annotation;
 
     /**
@@ -14,7 +14,7 @@ package org.bigbluebutton.modules.whiteboard.views
         {
         }
         
-        public function convert(dobj:GraphicObject):Annotation {
+        public function convert(dobj:IAnnotationDisplay):Annotation {
             var annotation:Annotation = new Annotation("todo", "todo", null);
             return annotation;
         }

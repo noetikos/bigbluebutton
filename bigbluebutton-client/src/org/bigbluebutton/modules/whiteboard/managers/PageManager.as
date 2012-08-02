@@ -24,7 +24,7 @@ package org.bigbluebutton.modules.whiteboard.managers
 	import mx.collections.ArrayCollection;	
 	import org.bigbluebutton.modules.present.events.NavigationEvent;
 	import org.bigbluebutton.modules.present.events.PresentationEvent;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.GraphicObject;
+	import org.bigbluebutton.modules.whiteboard.business.shapes.IAnnotationDisplay;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.WhiteboardConstants;
 	import org.bigbluebutton.modules.whiteboard.events.PageEvent;
 	import org.bigbluebutton.modules.whiteboard.events.WhiteboardUpdate;
@@ -59,7 +59,7 @@ package org.bigbluebutton.modules.whiteboard.managers
 			currPage.addToPage(gobjToAdd);
 */		}
 		
-		public function checkIfModifiedText(pageToCheck:Page, gobj:GraphicObject):Boolean {
+		public function checkIfModifiedText(pageToCheck:Page, gobj:IAnnotationDisplay):Boolean {
 			if(pageToCheck.containsUniqueInPage(gobj.getGraphicID())) return true;
 			return false;
 		}

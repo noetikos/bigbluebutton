@@ -45,7 +45,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.modules.whiteboard.WhiteboardCanvasModel;
 
-	public class TextObject extends UIComponent implements GraphicObject {
+	public class TextObject extends UIComponent implements IAnnotationDisplay {
 		public static const TYPE_NOT_EDITABLE:String = "dynamic";
 		public static const TYPE_EDITABLE:String = "editable";
 		

@@ -23,7 +23,7 @@ package org.bigbluebutton.modules.whiteboard.managers
 	
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawObject;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.GraphicObject;
+	import org.bigbluebutton.modules.whiteboard.business.shapes.IAnnotationDisplay;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.TextObject;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.WhiteboardConstants;
 	
@@ -44,7 +44,7 @@ package org.bigbluebutton.modules.whiteboard.managers
 			return isGrid;
 		}
 		
-		public function addToPage(gobj:GraphicObject):void {
+		public function addToPage(gobj:IAnnotationDisplay):void {
 			/*if(gobj.getGraphicType() == WhiteboardConstants.TYPE_SHAPE) {
 				if ((gobj as DrawObject).status != DrawObject.DRAW_END) return
 			} else if(gobj.getGraphicType() == WhiteboardConstants.TYPE_TEXT) {
@@ -55,14 +55,14 @@ package org.bigbluebutton.modules.whiteboard.managers
 			//else //LogUtil.error("Adding previously existing item to page: " + gobj.getGraphicID());
 		}
 		
-		public function removeFromPage(gobj:GraphicObject):void {
+		public function removeFromPage(gobj:IAnnotationDisplay):void {
 			this.removeItemAt(getIndexOf(gobj));
 		}
 		
-		private function getIndexOf(gobj:GraphicObject):int {
+		private function getIndexOf(gobj:IAnnotationDisplay):int {
 			var thisID:String = gobj.getGraphicID();
 			for(var i:int = 0; i < this.length; i++) {
-				var currObj:GraphicObject = this[i];
+				var currObj:IAnnotationDisplay = this[i];
 				if(thisID == currObj.getGraphicID()) return i;
 			}
 			return -1;
@@ -70,26 +70,26 @@ package org.bigbluebutton.modules.whiteboard.managers
 		
 		private function getIndexOfID(id:String):int {
 			for(var i:int = 0; i < this.length; i++) {
-				var currObj:GraphicObject = this[i];
+				var currObj:IAnnotationDisplay = this[i];
 				if(id == currObj.getGraphicID()) return i;
 			}
 			return -1;
 		}
 		
-		public function modifyInPage(modifyingGobj:GraphicObject):void {
+		public function modifyInPage(modifyingGobj:IAnnotationDisplay):void {
 			var indexToModify:int = getIndexOf(modifyingGobj);
 			this[indexToModify] = modifyingGobj;
 		}
 		
 		public function containsUniqueInPage(id:String):Boolean {
 			for(var i:int = 0; i < this.length; i++) {
-				var currObj:GraphicObject = this[i];
+				var currObj:IAnnotationDisplay = this[i];
 				if(id == currObj.getGraphicID()) return true;
 			}
 			return false;
 		}
 		
-		public function containsInPage(modifyingGobj:GraphicObject):Boolean {
+		public function containsInPage(modifyingGobj:IAnnotationDisplay):Boolean {
 			return this.contains(modifyingGobj);
 		}
 

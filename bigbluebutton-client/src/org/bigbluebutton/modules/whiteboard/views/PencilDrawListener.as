@@ -3,7 +3,7 @@ package org.bigbluebutton.modules.whiteboard.views
     import org.bigbluebutton.common.LogUtil;
     import org.bigbluebutton.modules.whiteboard.business.shapes.DrawObject;
     import org.bigbluebutton.modules.whiteboard.business.shapes.Pencil;
-    import org.bigbluebutton.modules.whiteboard.business.shapes.ShapeFactory;
+    import org.bigbluebutton.modules.whiteboard.business.shapes.AnnotationDisplayFactory;
     import org.bigbluebutton.modules.whiteboard.business.shapes.WhiteboardConstants;
     import org.bigbluebutton.modules.whiteboard.events.WhiteboardDrawEvent;
     import org.bigbluebutton.modules.whiteboard.models.Annotation;
@@ -16,9 +16,9 @@ package org.bigbluebutton.modules.whiteboard.views
         private var _segment:Array = new Array();
         private var _wbCanvas:WhiteboardCanvas;
         private var _sendFrequency:int;
-        private var _shapeFactory:ShapeFactory;
+        private var _shapeFactory:AnnotationDisplayFactory;
         
-        public function PencilDrawListener(wbCanvas:WhiteboardCanvas, sendShapeFrequency:int, shapeFactory:ShapeFactory)
+        public function PencilDrawListener(wbCanvas:WhiteboardCanvas, sendShapeFrequency:int, shapeFactory:AnnotationDisplayFactory)
         {
             _wbCanvas = wbCanvas;
             _sendFrequency = sendShapeFrequency;

@@ -31,14 +31,13 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 	 * @author dzgonjan
 	 * 
 	 */	
-	public class ShapeFactory extends GraphicFactory
+	public class AnnotationDisplayFactory
 	{
 		private var drawFactory:DrawObjectFactory;
 		private var _parentWidth:Number = 0;
 		private var _parentHeight:Number = 0;
 		
-		public function ShapeFactory() {
-			super(GraphicFactory.SHAPE_FACTORY);
+		public function AnnotationDisplayFactory() {
 			drawFactory = new DrawObjectFactory();
 		}
 		
@@ -47,6 +46,14 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 			_parentHeight = height;
 		}
 		
+        public static function denormalize(val:Number, side:Number):Number {
+            return (val*side)/100.0;
+        }
+        
+        public static function normalize(val:Number, side:Number):Number {
+            return (val*100.0)/side;
+        }
+        
 		/**
 		 * Creates a Flash Shape, given a DrawObject representation of it 
 		 * @param shape

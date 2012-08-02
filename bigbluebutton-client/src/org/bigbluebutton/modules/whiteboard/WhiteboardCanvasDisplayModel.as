@@ -25,12 +25,10 @@ package org.bigbluebutton.modules.whiteboard
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawGrid;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawObject;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawObjectFactory;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.GraphicFactory;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.GraphicObject;
+	import org.bigbluebutton.modules.whiteboard.business.shapes.IAnnotationDisplay;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.Pencil;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.ShapeFactory;
+	import org.bigbluebutton.modules.whiteboard.business.shapes.AnnotationDisplayFactory;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.TextBox;
-	import org.bigbluebutton.modules.whiteboard.business.shapes.TextFactory;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.TextObject;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.WhiteboardConstants;
 	import org.bigbluebutton.modules.whiteboard.events.GraphicObjectFocusEvent;
@@ -49,9 +47,9 @@ package org.bigbluebutton.modules.whiteboard
 	public class WhiteboardCanvasDisplayModel {
         public var whiteboardModel:WhiteboardModel;
 		public var wbCanvas:WhiteboardCanvas;	
-		private var graphicList:Array = new Array();
+		private var annotationsDisplayList:Array = new Array();
 		
-		private var shapeFactory:ShapeFactory = new ShapeFactory();
+		private var shapeFactory:AnnotationDisplayFactory = new AnnotationDisplayFactory();
 
         private var currentlySelectedTextObject:TextObject;
         
@@ -87,7 +85,7 @@ package org.bigbluebutton.modules.whiteboard
 					break;
 				case DrawObject.DRAW_UPDATE:
 				case DrawObject.DRAW_END:
-					if (graphicList.length == 0 || o.getType() == DrawObject.PENCIL || o.getType() == DrawObject.ERASER || recvdShapes) {
+					if (annotationsDisplayList.length == 0 || o.getType() == DrawObject.PENCIL || o.getType() == DrawObject.ERASER || recvdShapes) {
 						addNewShape(o);
 					} else {
 						removeLastGraphic();		
@@ -114,7 +112,7 @@ package org.bigbluebutton.modules.whiteboard
 					if (isPresenter) {
 						if (recvdShapes) addPresenterText(o);
 					} else {
-						if(graphicList.length == 0 || recvdShapes) {
+						if(annotationsDisplayList.length == 0 || recvdShapes) {
 							addNormalText(o);
 						} else modifyText(o);
 					} 	
@@ -140,7 +138,7 @@ package org.bigbluebutton.modules.whiteboard
             LogUtil.debug("PencilDrawListener sendShapeToServer - Got here 2 [" + points + "]");
             
             LogUtil.debug("Adding new shape 3 [" + points + "]");
-*/			graphicList.push(dobj);
+*/			annotationsDisplayList.push(dobj);
 		}
 		
 		private function calibrateNewTextWith(o:Annotation):TextObject {
@@ -167,7 +165,7 @@ package org.bigbluebutton.modules.whiteboard
 			tobj.registerListeners(textObjGainedFocusListener, textObjLostFocusListener, textObjTextListener, textObjSpecialListener);
 			wbCanvas.addGraphic(tobj);
 			wbCanvas.stage.focus = tobj.focus();
-			graphicList.push(tobj);
+			annotationsDisplayList.push(tobj);
 		}
 		
 		/* adds a new TextObject that is suited for a viewer. For example, it will not
@@ -184,7 +182,7 @@ package org.bigbluebutton.modules.whiteboard
 			tobj.makeEditable(false);
             tobj.border = true;
 			wbCanvas.addGraphic(tobj);
-			graphicList.push(tobj);
+			annotationsDisplayList.push(tobj);
 		}
 		
 		/* method to modify a TextObject that is already present on the whiteboard, as opposed to adding a new TextObject to the whiteboard */
@@ -202,9 +200,9 @@ package org.bigbluebutton.modules.whiteboard
 		private function removeGraphic(id:String):void {
 			var gobjData:Array = getGobjInfoWithID(id);
 			var removeIndex:int = gobjData[0];
-			var gobjToRemove:GraphicObject = gobjData[1] as GraphicObject;
+			var gobjToRemove:IAnnotationDisplay = gobjData[1] as IAnnotationDisplay;
 			wbCanvas.removeGraphic(gobjToRemove as DisplayObject);
-			graphicList.splice(removeIndex, 1);
+			annotationsDisplayList.splice(removeIndex, 1);
 		}	
 	
 		private function removeShape(id:String):void {
@@ -212,7 +210,7 @@ package org.bigbluebutton.modules.whiteboard
 			var removeIndex:int = dobjData[0];
 			var dobjToRemove:DrawObject = dobjData[1] as DrawObject;
 			wbCanvas.removeGraphic(dobjToRemove);
-			graphicList.splice(removeIndex, 1);
+			annotationsDisplayList.splice(removeIndex, 1);
 		}
 	
 		private function removeText(id:String):void {
@@ -220,7 +218,7 @@ package org.bigbluebutton.modules.whiteboard
 			var removeIndex:int = tobjData[0];
 			var tobjToRemove:TextObject = tobjData[1] as TextObject;
 			wbCanvas.removeGraphic(tobjToRemove);
-			graphicList.splice(removeIndex, 1);
+			annotationsDisplayList.splice(removeIndex, 1);
 		}	
 		
 		/* returns an array of the GraphicObject that has the specified id,
@@ -228,8 +226,8 @@ package org.bigbluebutton.modules.whiteboard
 		*/
 		private function getGobjInfoWithID(id:String):Array {	
 			var data:Array = new Array();
-			for(var i:int = 0; i < graphicList.length; i++) {
-				var currObj:GraphicObject = graphicList[i] as GraphicObject;
+			for(var i:int = 0; i < annotationsDisplayList.length; i++) {
+				var currObj:IAnnotationDisplay = annotationsDisplayList[i] as IAnnotationDisplay;
 				if(currObj.getGraphicID() == id) {
 					data.push(i);
 					data.push(currObj);
@@ -240,7 +238,7 @@ package org.bigbluebutton.modules.whiteboard
 		}
 
 		private function removeLastGraphic():void {
-			var gobj:GraphicObject = graphicList.pop();
+			var gobj:IAnnotationDisplay = annotationsDisplayList.pop();
 			if(gobj.getGraphicType() == WhiteboardConstants.TYPE_TEXT) {
 				(gobj as TextObject).makeEditable(false);
 				(gobj as TextObject).deregisterListeners(textObjGainedFocusListener, textObjLostFocusListener, textObjTextListener, textObjSpecialListener);
@@ -251,8 +249,8 @@ package org.bigbluebutton.modules.whiteboard
 		// returns all DrawObjects in graphicList
 		private function getAllShapes():Array {
 			var shapes:Array = new Array();
-			for(var i:int = 0; i < graphicList.length; i++) {
-				var currGobj:GraphicObject = graphicList[i];
+			for(var i:int = 0; i < annotationsDisplayList.length; i++) {
+				var currGobj:IAnnotationDisplay = annotationsDisplayList[i];
 				if(currGobj.getGraphicType() == WhiteboardConstants.TYPE_SHAPE) {
 					shapes.push(currGobj as DrawObject);
 				}
@@ -263,8 +261,8 @@ package org.bigbluebutton.modules.whiteboard
 		// returns all TextObjects in graphicList
 		private function getAllTexts():Array {
 			var texts:Array = new Array();
-			for(var i:int = 0; i < graphicList.length; i++) {
-				var currGobj:GraphicObject = graphicList[i];
+			for(var i:int = 0; i < annotationsDisplayList.length; i++) {
+				var currGobj:IAnnotationDisplay = annotationsDisplayList[i];
 				if(currGobj.getGraphicType() == WhiteboardConstants.TYPE_TEXT) {
 					texts.push(currGobj as TextObject)
 				}
@@ -273,7 +271,7 @@ package org.bigbluebutton.modules.whiteboard
 		}
 		
 		public function clearBoard(event:WhiteboardUpdate = null):void {
-			var numGraphics:int = this.graphicList.length;
+			var numGraphics:int = this.annotationsDisplayList.length;
 			for (var i:Number = 0; i < numGraphics; i++){
 				removeLastGraphic();
 			}
@@ -281,7 +279,7 @@ package org.bigbluebutton.modules.whiteboard
 		
 		public function undoAnnotation(id:String):void {
             /** We'll just remove the last annotation for now **/
-			if (this.graphicList.length > 0) {
+			if (this.annotationsDisplayList.length > 0) {
 				removeLastGraphic();
 			}
 		}
@@ -328,8 +326,8 @@ package org.bigbluebutton.modules.whiteboard
 			this.width = width;
 			this.height = height;
 
-			for (var i:int = 0; i < this.graphicList.length; i++){
-				redrawGraphic(this.graphicList[i] as GraphicObject, i);
+			for (var i:int = 0; i < this.annotationsDisplayList.length; i++){
+				redrawGraphic(this.annotationsDisplayList[i] as IAnnotationDisplay, i);
 			}		
 		}
 				
@@ -354,7 +352,7 @@ package org.bigbluebutton.modules.whiteboard
 //			}
 		}
 	
-		private function redrawGraphic(gobj:GraphicObject, objIndex:int):void {
+		private function redrawGraphic(gobj:IAnnotationDisplay, objIndex:int):void {
 			if(gobj.getGraphicType() == WhiteboardConstants.TYPE_SHAPE) {
 				var origDobj:DrawObject = gobj as DrawObject;
 				wbCanvas.removeGraphic(origDobj);
@@ -363,7 +361,7 @@ package org.bigbluebutton.modules.whiteboard
 				dobj.setGraphicID(origDobj.getGraphicID());
 				dobj.status = origDobj.status;
 				wbCanvas.addGraphic(dobj);
-				graphicList[objIndex] = dobj;
+				annotationsDisplayList[objIndex] = dobj;
 			} else if(gobj.getGraphicType() == WhiteboardConstants.TYPE_TEXT) {
                 var origTobj:TextObject = gobj as TextObject;                
                 var an:Annotation = whiteboardModel.getAnnotation(origTobj.getGraphicID());
@@ -383,7 +381,7 @@ package org.bigbluebutton.modules.whiteboard
                     }
                     
                     wbCanvas.addGraphic(tobj);
-                    graphicList[objIndex] = tobj;
+                    annotationsDisplayList[objIndex] = tobj;
                 }            
 			}
 		}
@@ -473,7 +471,7 @@ package org.bigbluebutton.modules.whiteboard
         }
 		
 		public function isPageEmpty():Boolean {
-			return graphicList.length == 0;
+			return annotationsDisplayList.length == 0;
 		}
 		
         /** Helper method to test whether this user is the presenter */
