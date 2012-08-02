@@ -121,7 +121,7 @@ Author: Ajay Gopinath <ajgopi124(at)gmail(dot)com>
 				enableTextToolbar();
 				this.textColor = e.target.selectedColor;
 				canvas.modifySelectedTextObject(textColor, backgroundVisible, bgColor, textSize);
-				canvas.stage.focus = currentlySelectedTextObject;
+				canvas.stage.focus = currentlySelectedTextObject.focus();
 			}
 			
 			/**
@@ -133,7 +133,7 @@ Author: Ajay Gopinath <ajgopi124(at)gmail(dot)com>
 				enableTextToolbar();
 				this.bgColor = e.target.selectedColor;
 				canvas.modifySelectedTextObject(textColor, backgroundVisible, bgColor, textSize);
-				canvas.stage.focus = currentlySelectedTextObject;
+				canvas.stage.focus = currentlySelectedTextObject.focus();
 			}
 			
 			/**
@@ -145,7 +145,7 @@ Author: Ajay Gopinath <ajgopi124(at)gmail(dot)com>
 				enableTextToolbar();
 				this.backgroundVisible = e.target.selected;
 				canvas.modifySelectedTextObject(textColor, backgroundVisible, bgColor, textSize);
-				canvas.stage.focus = currentlySelectedTextObject;
+				canvas.stage.focus = currentlySelectedTextObject.focus();
 			}
 			
 			/**
