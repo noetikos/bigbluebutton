@@ -20,6 +20,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 {
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.modules.whiteboard.models.Annotation;
+	import org.bigbluebutton.modules.whiteboard.models.WhiteboardModel;
 
 	/**
 	 * The DrawObjectFactory class receives a series of parameters and constructs an appropriate 
@@ -68,7 +69,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 			return d;
 		}
 		
-		public function createAnnotationObject(a:Annotation):AnnotationObject {
+		public function createAnnotationObject(a:Annotation, whiteboardModel:WhiteboardModel):AnnotationObject {
 			if (a.type == DrawObject.PENCIL) {
 				LogUtil.debug("Creating SCRIBBLE Annotation");
 				return new ScribbleAnnotation(a.id, a.type, a.status);
@@ -80,7 +81,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 				return new EllipseAnnotation(a.id, a.type, a.status);
 			} else if (a.type == DrawObject.TEXT) {
 				LogUtil.debug("Creating TEXT Annotation");	
-				return new TextAnnotation(a.id, a.type, a.status);
+				return new TextAnnotation(a.id, a.type, a.status, whiteboardModel);
 			}
 			
 			return null;
