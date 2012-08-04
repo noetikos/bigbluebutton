@@ -75,6 +75,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 			_origParentHeight = origParentHeight;
 			_origParentWidth = origParentWidth;               
 			
+			_tf.text = a.annotation.text;
 			_tf.antiAliasType = AntiAliasType.ADVANCED;
 			var format:TextFormat = new TextFormat();
 			format.size = newFontSize;
@@ -98,6 +99,10 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 			_tf.background = true;
 			_tf.backgroundColor = 0xFFFFFF;
 		}
-		
+
+		public function displayNormally():void {
+			_tf.multiline = true;
+			_tf.wordWrap = true;
+		}
 	}
 }
