@@ -45,7 +45,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 		 * the server 
 		 * 
 		 */		
-		override protected function optimize():void{
+		override protected function optimize():void {
 			var x1:Number = this.shape[0];
 			var y1:Number = this.shape[1];
 			var x2:Number = this.shape[this.shape.length - 2];

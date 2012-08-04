@@ -18,6 +18,9 @@
 */
 package org.bigbluebutton.modules.whiteboard.business.shapes
 {
+	import org.bigbluebutton.common.LogUtil;
+	import org.bigbluebutton.modules.whiteboard.models.Annotation;
+
 	/**
 	 * The DrawObjectFactory class receives a series of parameters and constructs an appropriate 
 	 * concrete DrawObject given those parameters.
@@ -63,6 +66,21 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
             }
 
 			return d;
+		}
+		
+		public function createAnnotationObject(a:Annotation):AnnotationObject {
+			if (a.type == DrawObject.PENCIL) {
+				LogUtil.debug("Creating SCRIBBLE Annotation");
+				return new ScribbleAnnotation(a.id, a.type, a.status);
+			} else if (a.type == DrawObject.RECTANGLE) {
+				LogUtil.debug("Creating RECTANGLE Annotation");
+				return new RectangleAnnotation(a.id, a.type, a.status);
+			} else if (a.type == DrawObject.ELLIPSE) {
+				LogUtil.debug("Creating ELLIPSE Annotation");
+				return new EllipseAnnotation(a.id, a.type, a.status);
+			}
+			
+			return null;
 		}
 		
 		/**

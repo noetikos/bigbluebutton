@@ -12,9 +12,9 @@ package org.bigbluebutton.modules.whiteboard.views
             _userid = UserManager.getInstance().getConference().getMyUserId();
         }
         
-        public function generateID():uint {
+        public function generateID():String {
             var curTime:Number = new Date().getTime();
-            return _userid + "-" + count++ + "-" + curTime;
+            return _userid + "-" + count++; // + "-" + curTime;
         }
     }
 }

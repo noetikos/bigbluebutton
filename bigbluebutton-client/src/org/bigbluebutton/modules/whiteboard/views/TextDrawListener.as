@@ -18,9 +18,11 @@ package org.bigbluebutton.modules.whiteboard.views
         private var _mouseYDown:Number = 0;
         
 		private var _mousedDown:Boolean = false;
+		private var _idGenerator:AnnotationIDGenerator;
 		
-        public function TextDrawListener(wbCanvas:WhiteboardCanvas, sendShapeFrequency:int, shapeFactory:ShapeFactory)
+        public function TextDrawListener(idGenerator:AnnotationIDGenerator, wbCanvas:WhiteboardCanvas, sendShapeFrequency:int, shapeFactory:ShapeFactory)
         {
+			_idGenerator = idGenerator;
             _wbCanvas = wbCanvas;
             _sendFrequency = sendShapeFrequency;
             _shapeFactory = shapeFactory;
@@ -61,19 +63,25 @@ package org.bigbluebutton.modules.whiteboard.views
             }        
         }
         
+		private var _curID:String;
+		
         private function sendTextToServer(status:String, tobj:TextObject):void {
             switch (status) {
                 case TextObject.TEXT_CREATED:
                     tobj.status = TextObject.TEXT_CREATED;
+					_curID = _idGenerator.generateID();
+					tobj.setGraphicID(_curID);
                     _textStatus = TextObject.TEXT_UPDATED;
                     break;
                 case TextObject.TEXT_UPDATED:
                     tobj.status = TextObject.TEXT_UPDATED;
+					tobj.setGraphicID(_curID);
                     break;
                 case TextObject.TEXT_PUBLISHED:
                     tobj.status = TextObject.TEXT_PUBLISHED;
                     _textStatus = TextObject.TEXT_CREATED;
-                    break;
+					tobj.setGraphicID(_curID);
+					break;
             }	
 			
 //            LogUtil.debug("SENDING TEXT: [" + tobj.text + "]");

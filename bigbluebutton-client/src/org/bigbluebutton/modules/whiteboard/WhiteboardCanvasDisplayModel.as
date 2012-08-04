@@ -12,16 +12,19 @@ package org.bigbluebutton.modules.whiteboard
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
-	import flash.ui.Keyboard;	
+	import flash.ui.Keyboard;
+	
 	import mx.collections.ArrayCollection;
 	import mx.controls.TextInput;
 	import mx.core.Application;
 	import mx.core.UIComponent;
 	import mx.managers.CursorManager;
+	
 	import org.bigbluebutton.common.IBbbCanvas;
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.core.managers.UserManager;
 	import org.bigbluebutton.main.events.MadePresenterEvent;
+	import org.bigbluebutton.modules.whiteboard.business.shapes.AnnotationObject;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawGrid;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawObject;
 	import org.bigbluebutton.modules.whiteboard.business.shapes.DrawObjectFactory;
@@ -50,6 +53,7 @@ package org.bigbluebutton.modules.whiteboard
         public var whiteboardModel:WhiteboardModel;
 		public var wbCanvas:WhiteboardCanvas;	
 		private var graphicList:Array = new Array();
+		private var _annotationsList:Array = new Array();
 		
 		private var shapeFactory:ShapeFactory = new ShapeFactory();
 
@@ -58,8 +62,41 @@ package org.bigbluebutton.modules.whiteboard
 		private var bbbCanvas:IBbbCanvas;
 		private var width:Number;
 		private var height:Number;
-		
+		private var drawFactory:DrawObjectFactory = new DrawObjectFactory();
+
 		public function drawGraphic(event:WhiteboardUpdate):void{
+			var o:Annotation = event.annotation;
+			var recvdShapes:Boolean = event.recvdShapes;
+			LogUtil.debug("**** Drawing graphic [" + o.type + "] *****");
+			if(o.type != "text") {		
+				var dobj:AnnotationObject;
+				switch (o.status) {
+					case DrawObject.DRAW_START:
+						dobj = drawFactory.createAnnotationObject(o);	
+						if (dobj != null) {
+							dobj.draw(o, shapeFactory.parentWidth, shapeFactory.parentHeight);
+							wbCanvas.addGraphic(dobj);
+							_annotationsList.push(dobj);							
+						}
+						break;
+					case DrawObject.DRAW_UPDATE:
+					case DrawObject.DRAW_END:
+						var gobj:AnnotationObject = _annotationsList.pop();	
+						wbCanvas.removeGraphic(gobj as DisplayObject);			
+						dobj = drawFactory.createAnnotationObject(o);	
+						if (dobj != null) {
+							dobj.draw(o, shapeFactory.parentWidth, shapeFactory.parentHeight);
+							wbCanvas.addGraphic(dobj);
+							_annotationsList.push(dobj);							
+						}
+						break;
+				} 									
+			} else { 
+				drawText(o, recvdShapes);	
+			}
+		}
+		
+		public function drawGraphic2(event:WhiteboardUpdate):void{
 			var o:Annotation = event.annotation;
 			var recvdShapes:Boolean = event.recvdShapes;
             LogUtil.debug("**** Drawing graphic [" + o.type + "] *****");
@@ -71,8 +108,7 @@ package org.bigbluebutton.modules.whiteboard
 			}
 		}
 		       
-        private function drawObjectFactory(a:Object):DrawObject {
-            var drawFactory:DrawObjectFactory = new DrawObjectFactory();
+        private function drawObjectFactory(a:Object):DrawObject {           
             var d:DrawObject = drawFactory.makeDrawObject(a.type, a.points, a.color, a.thickness, a.fill, a.fillColor, a.transparency);            
             d.setGraphicID(a.id);
             d.status = a.status;
@@ -123,31 +159,17 @@ package org.bigbluebutton.modules.whiteboard
 		}
 		
 		private function addNewShape(o:DrawObject):void {
-//			LogUtil.debug("Adding new shape [" + o.getType() + "," + o.getGraphicID() + "," + o.status + "]");
             if (o.getType() == DrawObject.TEXT) return;
 
 			var dobj:DrawObject = shapeFactory.makeShape(o);
-//            LogUtil.debug("Adding new shape 1 [" + dobj.getType() + "," + dobj.getGraphicID() + "," + dobj.status + "]");
 			wbCanvas.addGraphic(dobj);
-//            LogUtil.debug("Adding new shape 2 [" + dobj.getGraphicID() + ", [" + dobj.x + "," + dobj.y + "]");
-/*            
-            var points:String = "{type=" + dobj.getType() + ",points=";
-            for (var p:int = 0; p < dobj.getShapeArray().length; p++) {
-                points += dobj.getShapeArray()[p] + ",";
-            }
-            points +=  "]}";
-            
-            LogUtil.debug("PencilDrawListener sendShapeToServer - Got here 2 [" + points + "]");
-            
-            LogUtil.debug("Adding new shape 3 [" + points + "]");
-*/			graphicList.push(dobj);
+			graphicList.push(dobj);
 		}
 		
 		private function calibrateNewTextWith(o:Annotation):TextObject {
 			var tobj:TextObject = shapeFactory.makeTextObject(o);
 			tobj.setGraphicID(o.id);
 			tobj.status = o.status;
-//            LogUtil.debug("Created text object [" + tobj.getGraphicID() + "] in [" + tobj.text + "," + tobj.x + "," + tobj.y + "," + tobj.textSize + "]");
 			return tobj;
 		}
 			
@@ -328,9 +350,13 @@ package org.bigbluebutton.modules.whiteboard
 			this.width = width;
 			this.height = height;
 
-			for (var i:int = 0; i < this.graphicList.length; i++){
-				redrawGraphic(this.graphicList[i] as GraphicObject, i);
-			}		
+			for (var i:int = 0; i < this._annotationsList.length; i++){
+				redrawGraphic(this._annotationsList[i] as AnnotationObject, i);
+			}
+			
+//			for (var i:int = 0; i < this.graphicList.length; i++){
+//				redrawGraphic(this.graphicList[i] as GraphicObject, i);
+//			}		
 		}
 				
 		/* called when a user is made presenter, automatically make all the textfields currently on the page editable, so that they can edit it. */
@@ -353,8 +379,23 @@ package org.bigbluebutton.modules.whiteboard
 //				(texts[i] as TextObject).deregisterListeners(textObjGainedFocusListener, textObjLostFocusListener, textObjTextListener, textObjSpecialListener);
 //			}
 		}
-	
-		private function redrawGraphic(gobj:GraphicObject, objIndex:int):void {
+
+		private function redrawGraphic(gobj:AnnotationObject, objIndex:int):void {
+			if(gobj.type != "text") {
+				wbCanvas.removeGraphic(gobj);
+				var o:Annotation = whiteboardModel.getAnnotation(gobj.id);
+				if (o != null) {
+					var dobj:AnnotationObject = drawFactory.createAnnotationObject(o);	
+					if (dobj != null) {
+						dobj.draw(o, shapeFactory.parentWidth, shapeFactory.parentHeight);
+						wbCanvas.addGraphic(dobj);
+						_annotationsList[objIndex] = dobj;							
+					}					
+				}
+			}
+		}
+		
+		private function redrawGraphic1(gobj:GraphicObject, objIndex:int):void {
 			if(gobj.getGraphicType() == WhiteboardConstants.TYPE_SHAPE) {
 				var origDobj:DrawObject = gobj as DrawObject;
 				wbCanvas.removeGraphic(origDobj);

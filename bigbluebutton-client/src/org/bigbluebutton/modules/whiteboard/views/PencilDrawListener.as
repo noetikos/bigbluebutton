@@ -17,9 +17,11 @@ package org.bigbluebutton.modules.whiteboard.views
         private var _wbCanvas:WhiteboardCanvas;
         private var _sendFrequency:int;
         private var _shapeFactory:ShapeFactory;
-        
-        public function PencilDrawListener(wbCanvas:WhiteboardCanvas, sendShapeFrequency:int, shapeFactory:ShapeFactory)
+        private var _idGenerator:AnnotationIDGenerator;
+		
+        public function PencilDrawListener(idGenerator:AnnotationIDGenerator, wbCanvas:WhiteboardCanvas, sendShapeFrequency:int, shapeFactory:ShapeFactory)
         {
+			_idGenerator = idGenerator;
             _wbCanvas = wbCanvas;
             _sendFrequency = sendShapeFrequency;
             _shapeFactory = shapeFactory;
@@ -77,6 +79,8 @@ package org.bigbluebutton.modules.whiteboard.views
                 } /* (_isDrawing) */                
             }
         }
+		
+		private var _curID:String;
     
         private function sendShapeToServer(status:String, tool:WhiteboardTool):void {
             if (_segment.length == 0) return;
@@ -86,13 +90,17 @@ package org.bigbluebutton.modules.whiteboard.views
             switch (status) {
                 case DrawObject.DRAW_START:
                     dobj.status = DrawObject.DRAW_START;
+					_curID = _idGenerator.generateID();
+					dobj.setGraphicID(_curID);
                     _drawStatus = DrawObject.DRAW_UPDATE;
                     break;
                 case DrawObject.DRAW_UPDATE:
-                    dobj.status = DrawObject.DRAW_UPDATE;								
+                    dobj.status = DrawObject.DRAW_UPDATE;	
+					dobj.setGraphicID(_curID);
                     break;
                 case DrawObject.DRAW_END:
                     dobj.status = DrawObject.DRAW_END;
+					dobj.setGraphicID(_curID);
                     _drawStatus = DrawObject.DRAW_START;
                     break;
             }
