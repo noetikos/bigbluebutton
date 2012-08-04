@@ -78,6 +78,9 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 			} else if (a.type == DrawObject.ELLIPSE) {
 				LogUtil.debug("Creating ELLIPSE Annotation");
 				return new EllipseAnnotation(a.id, a.type, a.status);
+			} else if (a.type == DrawObject.TEXT) {
+				LogUtil.debug("Creating TEXT Annotation");	
+				return new TextAnnotation(a.id, a.type, a.status);
 			}
 			
 			return null;

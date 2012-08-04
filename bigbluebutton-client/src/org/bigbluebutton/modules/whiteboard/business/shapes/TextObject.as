@@ -129,8 +129,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 		public function makeGraphic(parentWidth:Number, parentHeight:Number):void {
             this.x = denormalize(origX, parentWidth);
             this.y = denormalize(origY, parentHeight);
-
-            
+           
             var newFontSize:Number = textSize;
             
             if (_origParentHeight == 0 && _origParentWidth == 0) {
