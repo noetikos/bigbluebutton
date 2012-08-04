@@ -98,11 +98,7 @@ package org.bigbluebutton.modules.whiteboard
 		}
 
 		// Draws a TextObject when/if it is received from the server
-		private function drawText(o:Annotation, recvdShapes:Boolean):void {		
-			if (recvdShapes) {
-				LogUtil.debug("RX: Got text [" + o.type + " " + o.status + " " + o.id + "]");	
-			}
-			
+		private function drawText(o:Annotation, recvdShapes:Boolean):void {					
 			var dobj:TextAnnotation;
 			switch (o.status) {
 				case TextObject.TEXT_CREATED:
@@ -120,6 +116,21 @@ package org.bigbluebutton.modules.whiteboard
 					}													
 					break;
 				case TextObject.TEXT_UPDATED:
+					var gobj1:AnnotationObject = _annotationsList.pop();	
+					wbCanvas.removeGraphic(gobj1 as DisplayObject);
+					dobj = drawFactory.createAnnotationObject(o, whiteboardModel) as TextAnnotation;	
+					if (dobj != null) {
+						dobj.draw(o, shapeFactory.parentWidth, shapeFactory.parentHeight);
+						if (isPresenter) {
+							dobj.displayForPresenter();
+							wbCanvas.stage.focus = dobj.setFocus();
+						} else {
+							dobj.displayNormally();
+						}
+						wbCanvas.addGraphic(dobj);
+						_annotationsList.push(dobj);							
+					}					
+					break;
 				case TextObject.TEXT_PUBLISHED:
 					var gobj:AnnotationObject = _annotationsList.pop();	
 					wbCanvas.removeGraphic(gobj as DisplayObject);			
@@ -329,8 +340,6 @@ package org.bigbluebutton.modules.whiteboard
 				}
 			}
 		}
-		        
-
 		
 		public function isPageEmpty():Boolean {
 			return graphicList.length == 0;

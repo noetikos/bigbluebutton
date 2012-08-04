@@ -138,7 +138,6 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 				event.charCode == 8 || // 'bkspace' key
 				event.charCode == 13) { // 'enter' key
 				_status = TextObject.TEXT_UPDATED;
-				var tobj:TextObject = event.target as TextObject;	
 				
 				// if the enter key is pressed, remove focus from the TextObject so that it is sent to the server.
 //				if(event.charCode == 13) {
@@ -163,8 +162,8 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 		
 		public function textObjLostFocusListener(event:FocusEvent):void {
 			LogUtil.debug("### LOST FOCUS ");
-			
-			//	sendTextToServer(TextObject.TEXT_PUBLISHED, tf);	
+			_status = TextObject.TEXT_PUBLISHED
+			sendTextToServer(TextObject.TEXT_PUBLISHED, _tf.text);	
 		}
 		
 		private function sendTextToServer(status:String, text:String):void {			
@@ -188,7 +187,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 		}
 		
 		private function sendGraphicToServer(gobj:Annotation, type:String):void {
-			//               LogUtil.debug("DISPATCHING SEND sendGraphicToServer [" + type + "]");
+			// LogUtil.debug("DISPATCHING SEND sendGraphicToServer [" + type + "]");
 			var event:WhiteboardDrawEvent = new WhiteboardDrawEvent(type);
 			event.annotation = gobj;
 			var dispatcher:Dispatcher = new Dispatcher();
