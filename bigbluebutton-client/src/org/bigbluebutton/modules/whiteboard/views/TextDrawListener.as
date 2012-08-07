@@ -1,5 +1,7 @@
 package org.bigbluebutton.modules.whiteboard.views
 {
+    import flash.events.KeyboardEvent;
+    
     import org.bigbluebutton.common.LogUtil;
     import org.bigbluebutton.modules.whiteboard.business.shapes.ShapeFactory;
     import org.bigbluebutton.modules.whiteboard.business.shapes.TextObject;
@@ -26,6 +28,10 @@ package org.bigbluebutton.modules.whiteboard.views
             _wbCanvas = wbCanvas;
             _sendFrequency = sendShapeFrequency;
             _shapeFactory = shapeFactory;
+        }
+        
+        public function ctrlKeyDown(down:Boolean):void {
+            // Ignore
         }
         
         public function onMouseDown(mouseX:Number, mouseY:Number, tool:WhiteboardTool):void

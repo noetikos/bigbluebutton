@@ -18,13 +18,18 @@ package org.bigbluebutton.modules.whiteboard.views
         private var _sendFrequency:int;
         private var _shapeFactory:ShapeFactory;
         private var _idGenerator:AnnotationIDGenerator;
-		
+		private var _ctrlKeyDown:Boolean = false;
+        
         public function PencilDrawListener(idGenerator:AnnotationIDGenerator, wbCanvas:WhiteboardCanvas, sendShapeFrequency:int, shapeFactory:ShapeFactory)
         {
 			_idGenerator = idGenerator;
             _wbCanvas = wbCanvas;
             _sendFrequency = sendShapeFrequency;
             _shapeFactory = shapeFactory;
+        }
+        
+        public function ctrlKeyDown(down:Boolean):void {
+            _ctrlKeyDown = down;
         }
         
         public function onMouseDown(mouseX:Number, mouseY:Number, tool:WhiteboardTool):void
@@ -69,6 +74,10 @@ package org.bigbluebutton.modules.whiteboard.views
                         var y:Number = _segment[1];
                         var width:Number = _segment[_segment.length-2]-x;
                         var height:Number = _segment[_segment.length-1]-y;
+                        
+                        if (tool.toolType == DrawObject.RECTANGLE || tool.toolType == DrawObject.ELLIPSE && _ctrlKeyDown) {
+                           width = height; 
+                        }
                         
                         if (!(Math.abs(width) <= 2 && Math.abs(height) <=2)) {
                             sendShapeToServer(DrawObject.DRAW_END, tool);

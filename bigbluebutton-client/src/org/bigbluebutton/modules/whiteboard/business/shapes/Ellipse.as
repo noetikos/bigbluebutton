@@ -19,6 +19,8 @@
 package org.bigbluebutton.modules.whiteboard.business.shapes
 {
 	import flash.display.Sprite;
+	
+	import org.bigbluebutton.common.LogUtil;
 
 	/**
 	 * The Ellipse class. Extends the DrawObject 
@@ -63,7 +65,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 		}
 		
 		override public function makeGraphic(parentWidth:Number, parentHeight:Number):void {
-			if(!fill)
+			if (!fill)
 				this.graphics.lineStyle(getThickness(), getColor(), getTransparencyLevel());
 			else this.graphics.lineStyle(getThickness(), getColor());
 
@@ -72,8 +74,11 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 			var startY:Number = denormalize(getShapeArray()[1], parentHeight);
 			var width:Number = denormalize(getShapeArray()[arrayEnd-2], parentWidth) - startX;
 			var height:Number = denormalize(getShapeArray()[arrayEnd-1], parentHeight) - startY;
-			if(fill) this.graphics.beginFill(getFillColor(), getTransparencyLevel());
-			this.graphics.drawEllipse(startX, startY, width, height);
+			if (fill) this.graphics.beginFill(getFillColor(), getTransparencyLevel());
+                
+			this.graphics.drawEllipse(startX, startY, width, width);
+//            LogUtil.debug("Drawing Circle **************************************");
+//            this.graphics.drawCircle(startX, startY, 100);
 		}
 		
 		override public function getProperties():Array {

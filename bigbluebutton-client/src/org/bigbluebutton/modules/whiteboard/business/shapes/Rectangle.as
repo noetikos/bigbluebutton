@@ -59,7 +59,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 		}
 		
 		override public function makeGraphic(parentWidth:Number, parentHeight:Number):void {
-			if(!fill)
+			if (!fill)
 				this.graphics.lineStyle(getThickness(), getColor(), getTransparencyLevel());
 			else this.graphics.lineStyle(getThickness(), getColor());
 
@@ -68,7 +68,8 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 			var startY:Number = denormalize(getShapeArray()[1], parentHeight);
 			var width:Number = denormalize(getShapeArray()[arrayEnd-2], parentWidth) - startX;
 			var height:Number = denormalize(getShapeArray()[arrayEnd-1], parentHeight) - startY;
-			if(fill) this.graphics.beginFill(getFillColor(), getTransparencyLevel());
+            
+			if (fill) this.graphics.beginFill(getFillColor(), getTransparencyLevel());
 			this.graphics.drawRect(startX,startY,width,height);
 		}
 		

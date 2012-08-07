@@ -163,7 +163,7 @@ package org.bigbluebutton.modules.whiteboard.business.shapes
 		public function textObjLostFocusListener(event:FocusEvent):void {
 			LogUtil.debug("### LOST FOCUS ");
 			_status = TextObject.TEXT_PUBLISHED
-			sendTextToServer(TextObject.TEXT_PUBLISHED, _tf.text);	
+//			sendTextToServer(TextObject.TEXT_PUBLISHED, _tf.text);	
 		}
 		
 		private function sendTextToServer(status:String, text:String):void {			
