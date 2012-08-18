@@ -1,0 +1,14 @@
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^dtutor\.org\.ua$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.dtutor\.org\.ua$
+RewriteRule ^webinar$ "http\:\/\/23\.23\.196\.83\/" [P]
+
+RewriteCond %{HTTP_HOST} ^dtutor\.org\.ua$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.dtutor\.org\.ua$
+RewriteRule ^demo/(.*)$ "http\:\/\/23\.23\.196\.83\/demo/$1" [P]
+
+RewriteCond %{HTTP_HOST} ^dtutor\.org\.ua$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.dtutor\.org\.ua$
+RewriteRule ^webinar/(.*)$ "http\:\/\/23\.23\.196\.83\/demo/$1" [P]
+
