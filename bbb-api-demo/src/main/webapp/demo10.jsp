@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 XX
 BigBlueButton - http://www.bigbluebutton.org
 
@@ -88,27 +88,18 @@ with BigBlueButton; if not, If not, see <http://www.gnu.org/licenses/>.
 		// Assume we want to create a meeting
 		//
 %>
-	<h2>Join a Course (Recorded)</h2>
+	<h2>Войти для записи</h2>
 
 	<form id="formcreate" name="formcreate" method="get" action=""> 		
 		<div>
-			<label class="labform" for="meetingID">Course:</label>
+			<label class="labform" for="meetingID">Webinar:</label>
 			<select name="meetingID" onchange="onChangeMeeting(this.value);">
-				<option value="English 101">English 101</option>
-				<option value="English 102">English 102</option>
-				<option value="English 103">English 103</option>
-				<option value="English 104">English 104</option>
-				<option value="English 105">English 105</option>
-				<option value="English 106">English 106</option>
-				<option value="English 107">English 107</option>
-				<option value="English 108">English 108</option>
-				<option value="English 109">English 109</option>
-				<option value="English 110">English 110</option>
+				<option value="dtutor">dtutor</option>
 			</select>
 		</div>
 		<div>
-			<label class="labform" id="descript" for="meta_description">Description:</label>
-			<textarea id="meta_description" name="meta_description" cols="50" rows="6" autofocus required></textarea>
+			<label class="labform" id="descript" for="meta_description">Session topic:</label>
+			<textarea id="meta_description" name="meta_description" cols="50" rows="2" autofocus required></textarea>
 		</div>
 		<div>
 			<label class="labform" for="meta_email">Your Name:</label>
@@ -119,16 +110,16 @@ with BigBlueButton; if not, If not, see <http://www.gnu.org/licenses/>.
 		<input type="hidden" name="action" value="create" />
 	</form>
 
-	<h3>Recorded Sessions</h3>
+	<h3>Доступные записи</h3>
 	<select id="actionscmb" name="actions" onchange="recordedAction(this.value);">
-		<option value="novalue" selected>Actions...</option>
-		<option value="publish">Publish</option>
-		<option value="unpublish">Unpublish</option>
-		<option value="delete">Delete</option>
+		<option value="novalue" selected>Действия...</option>
+		<option value="publish">Опубликовать</option>
+		<option value="unpublish">Скрыть</option>
+		<option value="delete">Удалить</option>
 	</select>
 	<table id="recordgrid"></table>
 	<div id="pager"></div> 
-	<p>Note: New recordings will appear in the above list after processing.  Refresh your browser to update the list.</p>
+	<p>Запись последнего вебинара будет доступна через некоторое время после его завершения. Нажмите Ctrl+F5 для обновления списка записей.</p>
 	<script>
 	function onChangeMeeting(meetingID){
 		isRunningMeeting(meetingID);
@@ -207,11 +198,11 @@ with BigBlueButton; if not, If not, see <http://www.gnu.org/licenses/>.
 			}
 		});
 	}
-	var meetingID="English 101,English 102,English 103,English 104,English 105,English 106,English 107,English 108,English 109,English 110";
+	var meetingID="dtutor";
 	$(document).ready(function(){
-		isRunningMeeting("English 232");
+		isRunningMeeting("dtutor");
 		$("#formcreate").validate();
-		$("#meetingID option[value='English 101']").attr("selected","selected");
+		$("#meetingID option[value='dtutor']").attr("selected","selected");
 		jQuery("#recordgrid").jqGrid({
 			url: "demo10_helper.jsp?command=getRecords&meetingID="+meetingID,
 			datatype: "xml",
@@ -256,7 +247,7 @@ with BigBlueButton; if not, If not, see <http://www.gnu.org/licenses/>.
 		
 		metadata.put("description", request.getParameter("meta_description"));
 		metadata.put("email", request.getParameter("meta_email"));
-		// Use the meetingID (e.g English 101) as the title as slides playback
+		// Use the meetingID (e.g dtutor) as the title as slides playback
 		// uses the title to display the link.
 		metadata.put("title", request.getParameter("meetingID"));
 

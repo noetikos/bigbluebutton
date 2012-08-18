@@ -72,10 +72,7 @@ Author: Fred Dixon <ffdixon@bigbluebutton.org>
 			</td>
 			<td style="text-align: left ">
 			<select name="meetingID">
-				<option value="English 232">English 232</option>
-				<option value="English 300">English 300</option>
-				<option value="English 402">English 402</option>
-				<option value="Demo Meeting">Demo Meeting</option>
+				<option value="dtutor">dtutor</option>
 			</select>				
 			</td>
 		</tr>

@@ -32,7 +32,7 @@ Author: Fred Dixon <ffdixon@bigbluebutton.org>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-	<title>Create Your Own Meeting</title>
+	<title>Join a Webinar - Noetikos</title>
 
 	<script type="text/javascript"
 		src="js/jquery.min.js"></script>
@@ -110,6 +110,7 @@ $(document).ready(function(){
 		String inviteURL = url + "create.jsp?action=invite&meetingID=" + URLEncoder.encode(meetingID, "UTF-8");
 %>
 
+<%@ include file="demo_header.jsp"%>
 <hr />
 <h2>Meeting Created</h2>
 <hr />
@@ -201,6 +202,7 @@ function mycallback() {
 }
 </script>
 
+<%@ include file="demo_header.jsp"%>
 <hr />
 <h2><strong><%=meetingID%></strong> has not yet started.</h2>
 <hr />
@@ -235,8 +237,9 @@ function mycallback() {
 		String meetingID = request.getParameter("meetingID");
 %>
 
+<%@ include file="demo_header.jsp"%>
 <hr />
-<h2>Invite</h2>
+<h2>Join a Webinar</h2>
 <hr />
 
 <FORM NAME="form3" METHOD="GET">

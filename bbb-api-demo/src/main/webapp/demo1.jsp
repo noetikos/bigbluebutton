@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 
 BigBlueButton - http://www.bigbluebutton.org
 
@@ -26,40 +26,98 @@ Author: Fred Dixon <ffdixon@bigbluebutton.org>
 	request.setCharacterEncoding("UTF-8"); 
 	response.setCharacterEncoding("UTF-8"); 
 %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Join Demo Meeting</title>
+	<title>Join a Webinar - Noetikos</title>
 </head>
-
 <body>
 
 <%@ include file="bbb_api.jsp"%>
 
 <% 
+
+//
+// We're going to define some sample courses (meetings) below.  This API exampe shows how you can create a login page for a course. 
+// The password below are not available to users as they are compiled on the server.
+//
+
+HashMap<String, HashMap> allMeetings = new HashMap<String, HashMap>();
+HashMap<String, String> meeting;
+
+// String welcome = "<br>Welcome to %%CONFNAME%%!<br><br>For help see our <a href=\"event:http://www.bigbluebutton.org/content/videos\"><u>tutorial videos</u></a>.<br><br>To join the voice bridge for this meeting:<br>  (1) click the headset icon in the upper-left, or<br>  (2) dial xxx-xxx-xxxx (toll free:1-xxx-xxx-xxxx) and enter conference ID: %%CONFNUM%%.<br><br>";
+
+String welcome = "<br>Welcome to <b>%%CONFNAME%%</b>!<br><br>To understand how BigBlueButton works see our <a href=\"event:http://www.bigbluebutton.org/content/videos\"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the headset icon (upper-left hand corner). <b>You can mute yourself in the Listeners window.</b>";
+
+//
+// noetikos meeeting
+//
+
+meeting = new HashMap<String, String>();
+allMeetings.put( "dtutor", meeting );	// The title that will appear in the drop-down menu
+	meeting.put("welcomeMsg", 	"Welcome to Debate Tutor");			// The welcome mesage
+	meeting.put("moderatorPW", 	"@Anna_Efremova");			// The password for moderator
+	meeting.put("viewerPW", 	"noetikos");			// The password for viewer
+	meeting.put("voiceBridge", 	"72013");			// The extension number for the voice bridge (use if connected to phone system)
+	meeting.put("logoutURL", 	"http://dtutor.org.ua/");  // The logout URL (use if you want to return to your pages)
+
+
+meeting = null;
+
+Iterator<String> meetingIterator = new TreeSet<String>(allMeetings.keySet()).iterator();
+
 if (request.getParameterMap().isEmpty()) {
-	//
-	// Assume we want to create a meeting
-	//
+		//
+		// Assume we want to join a course
+		//
 	%> 
 <%@ include file="demo_header.jsp"%>
 
-<h2>Join Demo Meeting</h2>
+<h2>Join Webinar</h2>
 
+Для входа в систему вебинаров ДОМОО "Noetikos" введите свое имя и нажимите Join или зайдите со своим именем на странице <a href="http://dtutor.org.ua/">http://dtutor.org.ua/</a>:
+<ul>
+   <li>для модератора - перейдите на страницу <a href="http://dtutor.org.ua/webinar/demo3.jsp">http://dtutor.org.ua/webinar/demo3.jsp</a> для ввода пароля, выданного ответственным представителем ДОМОО "Noetikos" (пожалуйста, не разглашайте данный пароль)</li>
+</ul>
 
-<FORM NAME="form1" METHOD="GET"> 
+<FORM NAME="form1" METHOD="GET">
 <table cellpadding="5" cellspacing="5" style="width: 400px; ">
 	<tbody>
 		<tr>
 			<td>
 				&nbsp;</td>
 			<td style="text-align: right; ">
-				Full Name:</td>
+				Full&nbsp;Name:</td>
 			<td style="width: 5px; ">
 				&nbsp;</td>
 			<td style="text-align: left ">
 				<input type="text" autofocus required name="username" /></td>
+		</tr>
+		
+	
+		
+		<tr>
+			<td>
+				&nbsp;</td>
+			<td style="text-align: right; ">
+				Webinar:</td>
+			<td>
+				&nbsp;
+			</td>
+			<td style="text-align: left ">
+			<select name="meetingID">
+			<%
+				String key;
+				while (meetingIterator.hasNext()) {
+					key = meetingIterator.next(); 
+					out.println("<option value=\"" + key + "\">" + key + "</option>");
+				}
+			%>
+			</select>
+				
+			</td>
 		</tr>
 		<tr>
 			<td>
@@ -78,22 +136,60 @@ if (request.getParameterMap().isEmpty()) {
 
 
 <%
-} else  if (request.getParameter("action").equals("create")) {
-	
-	//
-	// Got an action=create
-	//
-	
-	String url = BigBlueButtonURL.replace("bigbluebutton/","demo/");
-	// String preUploadPDF = "<?xml version='1.0' encoding='UTF-8'?><modules><module name='presentation'><document url='"+url+"pdfs/sample.pdf'/></module></modules>";
-	java.util.Random testIDGen = new java.util.Random();
-	int userID = testIDGen.nextInt(99999);
-	
-	String username = request.getParameter("username");
-	
-	String joinURL = getJoinURL(request.getParameter("username"), "Demo Meeting", "false", null, null, null);
+	} else if (request.getParameter("action").equals("create")) {
+		//
+		// Got an action=create
+		//
 
-	if (joinURL.startsWith("http://")) { 
+		String username = request.getParameter("username");
+		String meetingID = request.getParameter("meetingID");
+		String password = "noetikos";
+		
+		meeting = allMeetings.get( meetingID );
+		
+		String welcomeMsg = meeting.get( "welcomeMsg" );
+		String logoutURL = meeting.get( "logoutURL" );
+		Integer voiceBridge = Integer.parseInt( meeting.get( "voiceBridge" ).trim() );
+
+		String viewerPW = meeting.get( "viewerPW" );
+		String moderatorPW = meeting.get( "moderatorPW" );
+		
+		//
+		// Check if we have a valid password
+		//
+		if ( ! password.equals(viewerPW) && ! password.equals(moderatorPW) ) {
+%>
+
+Invalid Password, please <a href="javascript:history.go(-1)">try again</a>.
+
+<%
+			return;
+		}
+		
+		//
+		// Looks good, let's create the meeting
+		//
+		String meeting_ID = createMeeting( meetingID, welcomeMsg, moderatorPW, viewerPW, voiceBridge, logoutURL );
+		
+		//
+		// Check if we have an error.
+		//
+		if( meeting_ID.startsWith("Error ")) {
+%>
+
+Error: createMeeting() failed
+<p /><%=meeting_ID%> 
+
+
+<%
+			return;
+		}
+		
+		//
+		// We've got a valid meeting_ID and passoword -- let's join!
+		//
+		
+		String joinURL = getJoinMeetingURL(username, meeting_ID, password);			
 %>
 
 <script language="javascript" type="text/javascript">
@@ -101,20 +197,12 @@ if (request.getParameterMap().isEmpty()) {
 </script>
 
 <%
-	} else {
+	} 
 %>
-
-Error: getJoinURL() failed
-<p/>
-<%=joinURL %>
-
-<% 
-	}
-} 
-%>
-
-
+ 
 <%@ include file="demo_footer.jsp"%>
 
 </body>
 </html>
+
+

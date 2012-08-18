@@ -56,8 +56,8 @@ public String createMeeting(String meetingID, String welcome, String moderatorPa
 	String welcome_param = "";
 	String checksum = "";
 
-	String attendee_password_param = "&attendeePW=ap";
-	String moderator_password_param = "&moderatorPW=mp";
+	String attendee_password_param = "&attendeePW=noetikos";
+	String moderator_password_param = "&moderatorPW=@Anna_Efremova";
 	String voice_bridge_param = "";
 	String logoutURL_param = "";
 
@@ -183,7 +183,7 @@ public String getJoinURL(String username, String meetingID, String record, Strin
 
 	String create_parameters = "name=" + urlEncode(meetingID)
 		+ "&meetingID=" + urlEncode(meetingID) + welcome_param + voiceBridge_param
-		+ "&attendeePW=ap&moderatorPW=mp"
+		+ "&attendeePW=noetikos&moderatorPW=@Anna_Efremova"
 		+ "&record=" + record + getMetaData( metadata );
 
 
@@ -206,7 +206,7 @@ public String getJoinURL(String username, String meetingID, String record, Strin
 		//  
 
 		String join_parameters = "meetingID=" + urlEncode(meetingID)
-			+ "&fullName=" + urlEncode(username) + "&password=mp";
+			+ "&fullName=" + urlEncode(username) + "&password=@Anna_Efremova";
 
 		return base_url_join + join_parameters + "&checksum="
 			+ checksum("join" + join_parameters + salt);
@@ -242,7 +242,7 @@ public String getJoinURLXML(String username, String meetingID, String welcome, S
 
 	String create_parameters = "name=" + urlEncode(meetingID)
 		+ "&meetingID=" + urlEncode(meetingID) + welcome_param
-		+ "&attendeePW=ap&moderatorPW=mp&voiceBridge=" + voiceBridge;
+		+ "&attendeePW=noetikos&moderatorPW=@Anna_Efremova&voiceBridge=" + voiceBridge;
 
 	Document doc = null;
 
@@ -260,7 +260,7 @@ public String getJoinURLXML(String username, String meetingID, String welcome, S
 			.trim().equals("SUCCESS")) {
 
 		String join_parameters = "meetingID=" + urlEncode(meetingID)
-			+ "&fullName=" + urlEncode(username) + "&password=mp";
+			+ "&fullName=" + urlEncode(username) + "&password=@Anna_Efremova";
 
 		return base_url_join + join_parameters + "&checksum="
 			+ checksum("join" + join_parameters + salt);
@@ -279,7 +279,7 @@ public String getJoinURLXML(String username, String meetingID, String welcome, S
 public String getJoinURLViewer(String username, String meetingID) {
 	String base_url_join = BigBlueButtonURL + "api/join?";
 	String join_parameters = "meetingID=" + urlEncode(meetingID)
-		+ "&fullName=" + urlEncode(username) + "&password=ap";
+		+ "&fullName=" + urlEncode(username) + "&password=noetikos";
 
 	return base_url_join + join_parameters + "&checksum="
 		+ checksum("join" + join_parameters + salt);
