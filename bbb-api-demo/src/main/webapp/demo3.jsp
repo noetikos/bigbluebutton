@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 
 BigBlueButton - http://www.bigbluebutton.org
 
@@ -30,7 +30,7 @@ Author: Fred Dixon <ffdixon@bigbluebutton.org>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Join Password</title>
+	<title>Join a Webinar with Password - Noetikos</title>
 </head>
 <body>
 
@@ -51,89 +51,16 @@ HashMap<String, String> meeting;
 String welcome = "<br>Welcome to <b>%%CONFNAME%%</b>!<br><br>To understand how BigBlueButton works see our <a href=\"event:http://www.bigbluebutton.org/content/videos\"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the headset icon (upper-left hand corner). <b>You can mute yourself in the Listeners window.</b>";
 
 //
-// English courses
+// noetikos meeeting
 //
 
 meeting = new HashMap<String, String>();
-allMeetings.put( "ENGL-2013: Research Methods in English", meeting );	// The title that will appear in the drop-down menu
-	meeting.put("welcomeMsg", 	welcome);			// The welcome mesage
-	meeting.put("moderatorPW", 	"prof123");			// The password for moderator
-	meeting.put("viewerPW", 	"student123");			// The password for viewer
+allMeetings.put( "dtutor", meeting );	// The title that will appear in the drop-down menu
+	meeting.put("welcomeMsg", 	"Welcome to Debate Tutor");			// The welcome mesage
+	meeting.put("moderatorPW", 	"@Anna_Efremova");			// The password for moderator
+	meeting.put("viewerPW", 	"noetikos");			// The password for viewer
 	meeting.put("voiceBridge", 	"72013");			// The extension number for the voice bridge (use if connected to phone system)
-	meeting.put("logoutURL", 	"/demo/demo3.jsp");  // The logout URL (use if you want to return to your pages)
-
-meeting = new HashMap<String, String>();
-allMeetings.put( "ENGL-2213: Drama Production I", meeting );
-	meeting.put("welcomeMsg", 	welcome);
-	meeting.put("moderatorPW", 	"prof123");
-	meeting.put("viewerPW", 	"student123");
-	meeting.put("voiceBridge", 	"72213");
-	meeting.put("logoutURL", 	"/demo/demo3.jsp");
-
-meeting = new HashMap<String, String>();
-allMeetings.put( "ENGL-2023: Survey of English Literature", meeting );
-	meeting.put("welcomeMsg", 	welcome);
-	meeting.put("moderatorPW", 	"prof123");
-	meeting.put("viewerPW", 	"student123");
-	meeting.put("voiceBridge", 	"72023");
-	meeting.put("logoutURL", 	"/demo/demo3.jsp");
-
-//
-// Law Courses
-//
-
-meeting = new HashMap<String, String>();
-allMeetings.put( "LAW-1323: Fundamentals of Advocacy ", meeting );
-	meeting.put("welcomeMsg", 	welcome);
-	meeting.put("moderatorPW", 	"prof123");
-	meeting.put("viewerPW", 	"student123");
-	meeting.put("voiceBridge", 	"71232");
-	meeting.put("logoutURL", 	"/demo/demo3.jsp");
-
-meeting = new HashMap<String, String>();
-allMeetings.put( "LAW-2273: Business Organizations", meeting );
-	meeting.put("welcomeMsg", 	welcome);
-	meeting.put("moderatorPW", 	"prof123");
-	meeting.put("viewerPW", 	"student123");
-	meeting.put("voiceBridge", 	"72273");
-	meeting.put("logoutURL", 	"/demo/demo3.jsp");
-
-meeting = new HashMap<String, String>();
-allMeetings.put( "LAW-3113: Corporate Finance", meeting );
-	meeting.put("welcomeMsg", 	welcome);
-	meeting.put("moderatorPW", 	"theprof");
-	meeting.put("viewerPW", 	"student123");
-	meeting.put("voiceBridge", 	"71642");
-	meeting.put("logoutURL", 	"/demo/demo3.jsp");
-
-
-//
-// Professor's Virtaul Office Hours
-//
-
-meeting = new HashMap<String, String>();
-allMeetings.put( "Virtual Office Hours - Steve Stoyan", meeting );
-	meeting.put("welcomeMsg", 	welcome);
-	meeting.put("moderatorPW", 	"prof123");
-	meeting.put("viewerPW", 	"student123");
-	meeting.put("voiceBridge", 	"70001");
-	meeting.put("logoutURL", 	"/demo/demo3.jsp");
-
-meeting = new HashMap<String, String>();
-allMeetings.put( "Virtual Office Hours - Michael Bailetti", meeting );
-	meeting.put("welcomeMsg", 	welcome);
-	meeting.put("moderatorPW", 	"prof123");
-	meeting.put("viewerPW", 	"student123");
-	meeting.put("voiceBridge", 	"70002");
-	meeting.put("logoutURL", 	"/demo/demo3.jsp");
-
-meeting = new HashMap<String, String>();
-allMeetings.put( "Virtual Office Hours - Tony Weiss", meeting );
-	meeting.put("welcomeMsg", 	welcome);
-	meeting.put("moderatorPW", 	"prof123");
-	meeting.put("viewerPW", 	"student123");
-	meeting.put("voiceBridge", 	"70003");
-	meeting.put("logoutURL", 	"/demo/demo3.jsp");
+	meeting.put("logoutURL", 	"http://dtutor.org.ua/");  // The logout URL (use if you want to return to your pages)
 
 
 meeting = null;
@@ -149,6 +76,11 @@ if (request.getParameterMap().isEmpty()) {
 
 <h2>Join a Session (password required)</h2>
 
+Для входа в систему вебинаров ДОМОО "Noetikos" введите свое имя и пароль:
+<ul>
+   <li>для слушателя - <b>noetikos</b> или зайдите со своим именем на странице <a href="http://dtutor.org.ua/">http://dtutor.org.ua/</a> или <a href="http://23.23.196.83/demo/demo3.jsp">http://23.23.196.83/demo/demo1.jsp</a> без необходимости ввода пароля</li>
+   <li>для модератора - введите пароль, выданный ответственным представителем ДОМОО "Noetikos" (пожалуйста, не разглашайте данный пароль)</li>
+</ul>
 
 <FORM NAME="form1" METHOD="GET">
 <table cellpadding="5" cellspacing="5" style="width: 400px; ">
@@ -211,12 +143,6 @@ if (request.getParameterMap().isEmpty()) {
 </table>
 <INPUT TYPE=hidden NAME=action VALUE="create">
 </FORM>
-
-Passwords:  
-<ul>
-   <li>prof123 - login as professor (moderator privlidges)</li>
-   <li>student123 - login as student (viewer privlidges)</li>
-</ul>
 
 
 <%
